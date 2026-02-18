@@ -17,7 +17,7 @@ interface IWarehouseWorker
 /// <summary>
 /// HumanManager - Человек.
 /// </summary>
-class Human : IWarehouseWorker
+class HumanManager : IWarehouseWorker
 {
     public void ProcessOrder()
     {
