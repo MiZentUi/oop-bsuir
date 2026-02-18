@@ -11,7 +11,7 @@ namespace Orders;
 /// </summary>
 class RandomSQLDatabase
 {
-    public string ConnectionString { get; } = "random://root:password@localhost:228/shop";
+    public required string ConnectionString { get; set; } = "random://root:password@localhost:228/shop";
 
     public void SaveOrder(Order order, double total)
     {
