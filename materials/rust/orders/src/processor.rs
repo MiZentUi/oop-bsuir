@@ -5,8 +5,8 @@ use crate::{
 };
 
 pub struct OrderProcessor {
-    pub database: RandomSQLDatabase,
-    pub mailer: SmtpMailer,
+    database: RandomSQLDatabase,
+    mailer: SmtpMailer,
 }
 
 impl OrderProcessor {
@@ -57,8 +57,16 @@ impl OrderProcessor {
         }
         // 4. Логика сохранения
         if let Err(err) = self.database.save_order(order, total) {
-            return Err(format!("database error: {}", err.to_string()))
+            return Err(format!("database error: {}", err.to_string()));
         }
+
+        // 5. Логика уведомлений
+        let email_body = format!(
+            "<h1>Your order {} is confirmed!</h1><p>Total: {:.2}</p>",
+            order.id, total
+        );
+        self.mailer
+            .send_html_email(&order.client_email, "Order Confirmation", &email_body);
         Ok(())
     }
 }
