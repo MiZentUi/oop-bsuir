@@ -1,6 +1,6 @@
 
 // =========================================================
-// Файл: infrastructure.go
+// Файл: Infrastructure.cs
 // Описание: Имитация работы с БД и внешними сервисами.
 // =========================================================
 
@@ -11,7 +11,7 @@ namespace Orders;
 /// </summary>
 class RandomSQLDatabase
 {
-    public required string ConnectionString { get; set; } = "random://root:password@localhost:228/shop";
+    public string ConnectionString { get; set; } = "random://root:password@localhost:228/shop";
 
     public void SaveOrder(Order order, double total)
     {
