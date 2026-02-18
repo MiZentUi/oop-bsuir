@@ -1,9 +1,6 @@
+use chrono::Utc;
 use std::{
-    fs::OpenOptions,
-    io::Write,
-    os::unix::fs::OpenOptionsExt,
-    thread::sleep,
-    time::Duration,
+    fs::OpenOptions, io::Write, os::unix::fs::OpenOptionsExt, thread::sleep, time::Duration,
 };
 
 use crate::models::Order;
@@ -20,9 +17,7 @@ impl RandomSQLDatabase {
     }
     pub fn save_order(&self, order: &Order, total: f64) -> Result<(), std::io::Error> {
         println!("Connecting to RandomSQL at {}...", self.connection_string);
-        sleep(Duration::from_millis(
-            500 * 1, /*todo: time.Milliseconds */
-        ));
+        sleep(Duration::from_millis(500));
 
         let mut file = OpenOptions::new()
             .append(true)
@@ -34,11 +29,9 @@ impl RandomSQLDatabase {
 
         // Can it be modelled in Rust?
         // defer file.Close()
-
-        // TODO: a `chrono` or `time` crate is required to format time as in RFC3339
         let record = format!(
             "[{}] ID: {} | Type: {} | Total : {:.2}\n",
-            "ONCE", order.id, order.r#type, total
+            Utc::now().to_rfc3339(), order.id, order.r#type, total
         );
         file.write_all(record.as_bytes())?;
         println!("Order saved successfully.");

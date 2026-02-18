@@ -1,9 +1,11 @@
 //! # Файл `main.rs`
 //! Точка входа в приложение
 
+use std::process::exit;
+
 use orders::{
     models::{Address, Item, Order},
-    processor::{self, OrderProcessor},
+    processor::OrderProcessor,
     staff::{HumanManager, RobotPacker, WarehouseWorker, manage_warehouse},
 };
 
@@ -37,7 +39,8 @@ fn main() {
 
     // 3. Обработка заказа
     if let Err(err) = processor.process(&order) {
-        // todo: log!
+        eprintln!("Failed to process order: {}", err);
+        exit(1);
     }
 
     // 4. Работа с обслуживанием

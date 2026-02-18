@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 pub trait WarehouseWorker {
-    // TODO: &self or &mut self?
     fn process_order(&self);
     fn attend_meeting(&self);
     fn get_rest(&self);

@@ -18,7 +18,6 @@ impl OrderProcessor {
             },
         }
     }
-    /// TODO: `order`: reference or value
     pub fn process(&self, order: &Order) -> Result<(), String> {
         println!("Processing order {}", order.id);
 
@@ -60,6 +59,6 @@ impl OrderProcessor {
         if let Err(err) = self.database.save_order(order, total) {
             return Err(format!("database error: {}", err.to_string()))
         }
-        todo!()
+        Ok(())
     }
 }
