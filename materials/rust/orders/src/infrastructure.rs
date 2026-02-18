@@ -1,3 +1,7 @@
+//! Модуль `infrastructure`
+//!
+//! Имитация работы с БД и внешними сервисами.
+
 use chrono::Utc;
 use std::{
     fs::OpenOptions, io::Write, os::unix::fs::OpenOptionsExt, thread::sleep, time::Duration,
@@ -5,6 +9,7 @@ use std::{
 
 use crate::models::Order;
 
+/// [`RandomSQLDatabase`] - имитация тяжелой базы данных
 pub struct RandomSQLDatabase {
     pub connection_string: String,
 }
@@ -15,6 +20,8 @@ impl RandomSQLDatabase {
             connection_string: "random://root:password@localhost:228/shop".to_string(),
         }
     }
+
+    /// Сохранение заказа в "базу данных"
     pub fn save_order(&self, order: &Order, total: f64) -> Result<(), std::io::Error> {
         println!("Connecting to RandomSQL at {}...", self.connection_string);
         sleep(Duration::from_millis(500));
@@ -27,8 +34,6 @@ impl RandomSQLDatabase {
             .mode(0o644)
             .open("orders_db.txt")?;
 
-        // Can it be modelled in Rust?
-        // defer file.Close()
         let record = format!(
             "[{}] ID: {} | Type: {} | Total : {:.2}\n",
             Utc::now().to_rfc3339(), order.id, order.r#type, total
@@ -39,6 +44,7 @@ impl RandomSQLDatabase {
     }
 }
 
+/// [`SmtpMailer`] - имитация почтового сервиса
 pub struct SmtpMailer {
     pub server: String,
 }

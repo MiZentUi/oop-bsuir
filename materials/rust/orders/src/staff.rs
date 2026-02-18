@@ -1,4 +1,6 @@
-use std::sync::Arc;
+//! Модуль `staff`.
+//!
+//! Описание: система управления персоналом склада.
 
 pub trait WarehouseWorker {
     fn process_order(&self);
@@ -7,6 +9,7 @@ pub trait WarehouseWorker {
     fn swing_the_lead(&self);
 }
 
+/// [`HumanManager`] - человек
 pub struct HumanManager;
 
 impl WarehouseWorker for HumanManager {
@@ -27,6 +30,7 @@ impl WarehouseWorker for HumanManager {
     }
 }
 
+/// [`RobotPacker`] - робот
 pub struct RobotPacker {
     pub model: String
 }
@@ -49,8 +53,6 @@ impl WarehouseWorker for RobotPacker {
     }
 }
 
-// dyn reference or box?
-// or Arc?
 /// [`manage_warehouse`] - функция, которая работает со списком работников
 pub fn manage_warehouse(workers:& [Box<dyn WarehouseWorker>]) {
     for worker in workers {
