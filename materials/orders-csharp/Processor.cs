@@ -72,7 +72,7 @@ class OrderProcessor
 
 		// 5. Логика уведомлений
 
-		var emailBody = $"<h1>Your order {order.Id} is confirmed!</h1><p>Total: {total:.2f}</p>";
+		var emailBody = $"<h1>Your order {order.Id} is confirmed!</h1><p>Total: {total:F2}</p>";
 	    mailer.SendHtmlEmail(order.ClientEmail, "Order Confirmation", emailBody);
     }
 }

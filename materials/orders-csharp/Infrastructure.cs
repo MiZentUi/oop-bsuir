@@ -23,7 +23,7 @@ class RandomSQLDatabase
             Access = FileAccess.Write,
             Mode = FileMode.Append
         });
-        var @record = $"[{DateTime.Now:yyyy-MM-dd'T'HH:mm:ss.fffK}] ID: {order.Id} | Type: {order.Type} | Total: {total:.2f}\n";
+        var @record = $"[{DateTime.Now:yyyy-MM-ddTHH:mm:ssK}] ID: {order.Id} | Type: {order.Type} | Total: {total:F2}\n";
         file.Write(@record);
 
         Console.WriteLine("Order saved successfully.");
