@@ -5,5 +5,5 @@ members = [
     "forecast/clients",
     "forecast/controllers",
     "forecast/models",
-    "forecast/responses"
+    "forecast/api", "forecast/shared",
 ]

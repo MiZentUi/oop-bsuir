@@ -4,11 +4,13 @@ use clients::WeatherDataClient;
 use models::weather::CurrentWeather;
 use rust_decimal::Decimal;
 
-pub struct CurrentWeatherController<T: WeatherDataClient> {
+#[derive(Clone)]
+pub struct CurrentWeatherController<T: WeatherDataClient + Clone> {
     pub client: T,
 }
 
-impl<T: WeatherDataClient> CurrentWeatherController<T> {
+// TODO: async request
+impl<T: WeatherDataClient + Clone> CurrentWeatherController<T> {
     pub fn new(client: T) -> Self {
         CurrentWeatherController { client }
     }

@@ -7,10 +7,16 @@ use ureq::http::StatusCode;
 use crate::WeatherDataClient;
 
 #[derive(Deserialize)]
-struct OpenWeatherResponse {
+struct Main {
     pub temp: Decimal,
 }
 
+#[derive(Deserialize)]
+struct OpenWeatherResponse {
+    pub main: Main,
+}
+
+#[derive(Clone)]
 pub struct OpenWeatherClient {
     api_key: String,
     base_url: String,
@@ -43,6 +49,6 @@ impl WeatherDataClient for OpenWeatherClient {
             );
         }
         let data: OpenWeatherResponse = serde_json::from_reader(resp.body_mut().as_reader())?;
-        Ok(data.temp)
+        Ok(data.main.temp)
     }
 }
