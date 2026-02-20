@@ -1,14 +1,23 @@
+use std::sync::Arc;
 
 use axum::{
     Json,
     extract::{Query, State},
-    http::{StatusCode}, response::IntoResponse,
+    http::StatusCode,
+    response::IntoResponse,
 };
 use clients::OpenWeatherClient;
 use controllers::weather::CurrentWeatherController;
+use models::weather::CurrentWeather;
 use rust_decimal::Decimal;
 use serde::Deserialize;
-use shared::{responses, utils};
+use serde_json::json;
+use shared::{
+    responses::{self, StatusResponse, SuccessResponse},
+    utils,
+};
+use utoipa::{IntoParams, OpenApi, ToSchema};
+use utoipa_axum::{router::OpenApiRouter, routes};
 
 #[derive(Clone)]
 pub struct WeatherHandler {
@@ -28,19 +37,39 @@ impl WeatherHandler {
     }
 }
 
-// TODO: implement ToSchema for Decimal
-
-#[derive(Deserialize)]
-pub struct GetCurrentWeatherParams {
+#[derive(Deserialize, IntoParams, ToSchema)]
+pub struct GetCurrentWeatherQuery {
+    /// Latitude
+    #[param(default = "18.300231990440125")]
     lat: Decimal,
+    /// Longitude
+    #[param(default = "-64.8251590359234")]
     lon: Decimal,
 }
 
+pub fn routers() -> OpenApiRouter {
+    OpenApiRouter::default()
+        .routes(routes!(handle_get_current_weather))
+        .with_state(WeatherHandler::new())
+}
+
+#[utoipa::path(get,
+    path = "/weather",
+    params(GetCurrentWeatherQuery),
+    summary = "Get Current Weather",
+    description = "Returns current weather for given coordinates",
+    tags = ["weather"],
+    responses(
+         (status=200, body=SuccessResponse<CurrentWeather>),
+         (status=400, body=StatusResponse),
+         (status=500, body=StatusResponse)
+    ),
+)]
 pub async fn handle_get_current_weather(
     State(h): State<WeatherHandler>,
-    Query(GetCurrentWeatherParams { lat, lon }): Query<GetCurrentWeatherParams>,
+    Query(GetCurrentWeatherQuery { lat, lon }): Query<GetCurrentWeatherQuery>,
 ) -> impl IntoResponse {
-    match h.controller.get_current_weather(lat, lon)  {
+    match h.controller.get_current_weather(lat, lon) {
         Ok(data) => (
             StatusCode::OK,
             Json(responses::SuccessResponse {
@@ -48,13 +77,15 @@ pub async fn handle_get_current_weather(
                 message: "Success".to_owned(),
                 data,
             }),
-        ).into_response(),
+        )
+            .into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(responses::StatusResponse {
                 code: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                message: err.to_string()
-            })
-        ).into_response(),
+                message: err.to_string(),
+            }),
+        )
+            .into_response(),
     }
 }
