@@ -1,4 +1,7 @@
-//! Модуль `processor` - основная бизнес-логика
+//! Модуль `processor`
+//!
+//! Описание: основная бизнес-логика
+
 use crate::{
     infrastructure::{RandomSQLDatabase, SmtpMailer},
     models::Order,
@@ -19,7 +22,7 @@ impl OrderProcessor {
         }
     }
     pub fn process(&self, order: &Order) -> Result<(), String> {
-        println!("Processing order {}", order.id);
+        println!("--- Processing order {} ---", order.id);
 
         // 1. Логика валидации
         if order.items.len() == 0 {

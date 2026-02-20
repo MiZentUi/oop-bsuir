@@ -32,7 +32,7 @@ impl WarehouseWorker for HumanManager {
 
 /// [`RobotPacker`] - робот
 pub struct RobotPacker {
-    pub model: String
+    pub model: String,
 }
 
 impl WarehouseWorker for RobotPacker {
@@ -47,14 +47,15 @@ impl WarehouseWorker for RobotPacker {
     fn get_rest(&self) {
         println!("Robot was taken for maintenance");
     }
-    
+
     fn swing_the_lead(&self) {
         println!("CRITICAL ERROR: Robot cannot waste our money (we hope so)");
     }
 }
 
 /// [`manage_warehouse`] - функция, которая работает со списком работников
-pub fn manage_warehouse(workers:& [Box<dyn WarehouseWorker>]) {
+pub fn manage_warehouse(workers: &[Box<dyn WarehouseWorker>]) {
+    println!("\n--- Warehouse Shift Started ---");
     for worker in workers {
         worker.process_order();
         worker.attend_meeting();

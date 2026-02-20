@@ -39,8 +39,7 @@ fn main() {
 
     // 3. Обработка заказа
     if let Err(err) = processor.process(&order) {
-        eprintln!("Failed to process order: {}", err);
-        exit(1);
+        panic!("Failed to process order: {}", err);
     }
 
     // 4. Работа с обслуживанием
