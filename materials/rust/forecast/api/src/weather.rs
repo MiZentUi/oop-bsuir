@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use axum::{
     Json,
-    extract::{Query, State},
+    extract::{Query, State, rejection::QueryRejection},
     http::StatusCode,
     response::IntoResponse,
 };
@@ -67,25 +67,27 @@ pub fn routers() -> OpenApiRouter {
 )]
 pub async fn handle_get_current_weather(
     State(h): State<WeatherHandler>,
-    Query(GetCurrentWeatherQuery { lat, lon }): Query<GetCurrentWeatherQuery>,
-) -> impl IntoResponse {
+    query: Result<Query<GetCurrentWeatherQuery>, QueryRejection>,
+) -> axum::response::Response {
+    if let Err(_) = query {
+        return responses::StatusResponse {
+            code: StatusCode::BAD_REQUEST.as_u16(),
+            message: "invalid coordinates".to_string(),
+        }
+        .into_response();
+    }
+    let Query(GetCurrentWeatherQuery { lat, lon }) = query.unwrap();
     match h.controller.get_current_weather(lat, lon) {
-        Ok(data) => (
-            StatusCode::OK,
-            Json(responses::SuccessResponse {
-                code: StatusCode::OK.as_u16(),
-                message: "Success".to_owned(),
-                data,
-            }),
-        )
-            .into_response(),
-        Err(err) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(responses::StatusResponse {
-                code: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                message: err.to_string(),
-            }),
-        )
-            .into_response(),
+        Ok(data) => responses::SuccessResponse {
+            code: StatusCode::OK.as_u16(),
+            message: "Success".to_owned(),
+            data,
+        }
+        .into_response(),
+        Err(err) => responses::StatusResponse {
+            code: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+            message: err.to_string(),
+        }
+        .into_response(),
     }
 }
