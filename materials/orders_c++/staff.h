@@ -3,6 +3,11 @@
 #include <vector>
 #include <string>
 
+// =========================================================
+// Файл: staff.cpp
+// Описание: Система управления персоналом склада.
+// =========================================================
+
 class WarehouseWorker {
 public:
   virtual ~WarehouseWorker() = default;
@@ -12,6 +17,7 @@ public:
   virtual void SwingingTheLead() = 0;
 };
 
+// HumanManager - Человек
 class HumanManager : public WarehouseWorker {
 public:
     void ProcessOrder() override {
@@ -31,6 +37,7 @@ public:
     }
 };
 
+// RobotPacker - Робот
 class RobotPacker : public WarehouseWorker {
 public:
     std::string Model;
@@ -54,6 +61,7 @@ public:
     }
 };
 
+// ManageWarehouse - функция, которая работает со списком работников
 void ManageWarehouse(const std::vector<WarehouseWorker*>& workers) {
     std::cout << "\n--- Warehouse Shift Started ---" << std::endl;
     for (auto* worker : workers) {

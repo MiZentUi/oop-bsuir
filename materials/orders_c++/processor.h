@@ -5,6 +5,11 @@
 #include <format>
 #include "infrastructure.h"
 
+// =========================================================
+// Файл: processor.сpp
+// Описание: Основная бизнес-логика.
+// =========================================================
+
 class OrderProcessor {
     RandomSQLDatabase* database;
     SmtpMailer* mailer;
@@ -44,10 +49,12 @@ public:
         //3. логика скидок и налогов
         if (order.Type == "Standard")
         {
+            // Стандартный налог
             total = total * 1.2;
         }
         else if (order.Type == "Premium")
         {
+            // Скидка 10% + налог
             total = (total * 0.9) * 1.2;
         }
         else if (order.Type == "Budget")
@@ -60,7 +67,7 @@ public:
         }
         else if (order.Type == "International")
         {
-            total = total * 1.5;
+            total = total * 1.5; // Таможенный сбор
             if (order.Destination.City == "Nowhere")
             {
                 throw std::runtime_error("cannot ship to Nowhere");
