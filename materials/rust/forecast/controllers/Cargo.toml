@@ -6,4 +6,4 @@ edition = "2024"
 [dependencies]
 clients = { version = "0.1.0", path = "../clients" }
 models = { version = "0.1.0", path = "../models" }
-rust_decimal = "1.40.0"
+rust_decimal.workspace = true
