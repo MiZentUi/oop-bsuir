@@ -8,31 +8,39 @@
 #include <ctime>
 #include <chrono>
 #include <format>
+#include <cerrno>
 
 class RandomSQLDatabase
 {
   std::string ConnectionString;
+  
 public:
-  RandomSQLDatabase() : ConnectionString("random://root:password@localhost:228/shop") {std::cout << "randomsqldatabase" << std::endl;} //!!!w
+  RandomSQLDatabase() : ConnectionString("random://root:password@localhost:228/shop") {}
 
-  bool SaveOrder(const Order& order, double total)
-  {
-    std::cout << "Connecting to RandomSQL at" << ConnectionString << "...\n";
+  std::error_code SaveOrder(const Order& order, double total) {
+    std::cout << "Connecting to RandomSQL at " << ConnectionString << "...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
     std::ofstream file("orders_db.txt", std::ios::app);
     if (!file.is_open())
     {
-      return 1;
+        return std::error_code{errno, std::generic_category()};
     }
+
     auto now = std::chrono::system_clock::now();
     auto local_now = std::chrono::zoned_time{std::chrono::current_zone(), now};
     std::string time_str = std::format("{:%Y-%m-%dT%H:%M:%S}", local_now);
-    std::cout << '[' << time_str << "] ID: " << order.ID << " | Type: " << order.Type << " | Total: " << total << "\n";
+    file << '[' << time_str << "] ID: " << order.ID << " | Type: " << order.Type << " | Total: " << total << "\n";
+
+    if (!file)
+    {
+        return std::error_code{errno, std::generic_category()};
+    }
 
     file.close();
-
     std::cout << "Order saved successfully." << std::endl;
-    return 0;
+    
+    return {};
   }
 };
 

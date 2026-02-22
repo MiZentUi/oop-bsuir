@@ -20,7 +20,7 @@ public:
         delete mailer;
     }
 
-    void Process(Order order) //#include <boost> ???
+    void Process(Order order)
     {
         std::cout << "--- Processing Order " << order.ID << " ---\n";
 
@@ -35,7 +35,7 @@ public:
         }
 
         //2. Логика расчёта суммы
-        double total;
+        double total = 0;
         for (auto item : order.Items)
         {
             total += item.Price;
@@ -72,14 +72,22 @@ public:
         }
 
         //4. Логика сохранения
-        bool err = this->database->SaveOrder(order, total);
-        if (err != 0)
+        if (auto ec = this->database->SaveOrder(order, total))
         {
-            throw std::runtime_error("database error!"); //NO INTERPOLATION!
-        } //very bad
+            throw std::runtime_error("database error: " + ec.message());
+        }
+
+        // try
+        // {
+
+        // }
+        // catch ()
+        // {
+
+        // }
 
         //5. Логика уведомлений
-        std::string emailBody = std::format("Your order {} is confirmed!\nTotal: {}.\n", order.ID, total);
+        std::string emailBody = std::format("Your order {} is confirmed!\nTotal: {:.2f}.\n", order.ID, total);
         this->mailer->SendHtmlEmail(order.ClientEmail, "Order Confirmation", emailBody);
     }
 };

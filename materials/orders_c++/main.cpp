@@ -20,10 +20,16 @@ int main ()
     OrderProcessor processor;
 
     // 3. Обработка заказа
-    processor.Process(order);
+    try 
+    {
+        processor.Process(order);
+    }
+    catch(const std::runtime_error& e)
+    {
+        std::cout << "Failed to process order: " << e.what() << std::endl;
+    }
 
     // 4. Работа с обслуживанием
-
     std::cout << "\nTesting Warehouse Stuff:";
 
     auto hm = new HumanManager{};
