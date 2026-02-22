@@ -74,7 +74,7 @@ pub async fn handle_get_current_weather(
         .into_response();
     }
     let Query(GetCurrentWeatherQuery { lat, lon }) = query.unwrap();
-    match h.controller.get_current_weather(lat, lon) {
+    match h.controller.get_current_weather(lat, lon).await {
         Ok(data) => responses::SuccessResponse {
             code: StatusCode::OK.as_u16(),
             message: "Success".to_owned(),

@@ -1,10 +1,10 @@
 use std::error::Error;
 
+use reqwest::StatusCode;
 use rust_decimal::Decimal;
 use serde::Deserialize;
-use ureq::http::StatusCode;
 
-use crate::WeatherDataClient;
+use crate::{BadStatusError, WeatherDataClient};
 
 #[derive(Deserialize)]
 struct Main {
@@ -23,15 +23,13 @@ pub struct OpenWeatherClient {
 }
 
 impl OpenWeatherClient {
-    // TODO: Box? Rc/Arc?
     pub fn new(api_key: String, base_url: String) -> OpenWeatherClient {
         OpenWeatherClient { api_key, base_url }
     }
-    
 }
 
 impl WeatherDataClient for OpenWeatherClient {
-    fn location_current_temperature(
+    async fn location_current_temperature(
         &self,
         lat: Decimal,
         lon: Decimal,
@@ -40,15 +38,11 @@ impl WeatherDataClient for OpenWeatherClient {
             "{}?lat={}&lon={}&appid={}&units=metric",
             self.base_url, lat, lon, self.api_key
         );
-        let mut resp = ureq::get(url).call()?;
+        let resp = reqwest::get(url).await?;
         if resp.status() != StatusCode::OK {
-            // TODO: Use an error?
-            panic!(
-                "openweather returned bad status: {}",
-                resp.status().as_u16()
-            );
+            return Err(Box::new(BadStatusError::new("OpenWeather", resp.status())));
         }
-        let data: OpenWeatherResponse = serde_json::from_reader(resp.body_mut().as_reader())?;
+        let data: OpenWeatherResponse = serde_json::from_str(&resp.text().await?)?;
         Ok(data.main.temp)
     }
 }

@@ -5,5 +5,5 @@ pub trait WeatherDataClient {
         &self,
         lat: Decimal,
         lon: Decimal,
-    ) -> Result<Decimal, Box<dyn std::error::Error>>;
+    ) -> impl std::future::Future<Output = Result<Decimal, Box<dyn std::error::Error>>> + Send;
 }

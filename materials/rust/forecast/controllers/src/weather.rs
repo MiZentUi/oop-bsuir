@@ -9,18 +9,17 @@ pub struct CurrentWeatherController<T: WeatherDataClient + Clone> {
     pub client: T,
 }
 
-// TODO: async request
 impl<T: WeatherDataClient + Clone> CurrentWeatherController<T> {
     pub fn new(client: T) -> Self {
         CurrentWeatherController { client }
     }
-    pub fn get_current_weather(
+    pub async fn get_current_weather(
         &self,
         lat: Decimal,
         lon: Decimal,
     ) -> Result<CurrentWeather, Box<dyn Error>> {
         Ok(CurrentWeather {
-            temperature: self.client.location_current_temperature(lat, lon)?,
+            temperature: self.client.location_current_temperature(lat, lon).await?,
         })
     }
 }
