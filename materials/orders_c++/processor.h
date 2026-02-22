@@ -72,19 +72,14 @@ public:
         }
 
         //4. Логика сохранения
-        if (auto ec = this->database->SaveOrder(order, total))
+        try
         {
-            throw std::runtime_error("database error: " + ec.message());
+            this->database->SaveOrder(order, total);
         }
-
-        // try
-        // {
-
-        // }
-        // catch ()
-        // {
-
-        // }
+        catch (const std::runtime_error& e)
+        {
+            std::cout << "database error: " << e.what() << std::endl;
+        }
 
         //5. Логика уведомлений
         std::string emailBody = std::format("Your order {} is confirmed!\nTotal: {:.2f}.\n", order.ID, total);

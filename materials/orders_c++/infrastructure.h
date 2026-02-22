@@ -8,23 +8,22 @@
 #include <ctime>
 #include <chrono>
 #include <format>
-#include <cerrno>
 
 class RandomSQLDatabase
 {
   std::string ConnectionString;
-  
+
 public:
   RandomSQLDatabase() : ConnectionString("random://root:password@localhost:228/shop") {}
 
-  std::error_code SaveOrder(const Order& order, double total) {
+  void SaveOrder(const Order& order, double total) {
     std::cout << "Connecting to RandomSQL at " << ConnectionString << "...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     std::ofstream file("orders_db.txt", std::ios::app);
     if (!file.is_open())
     {
-        return std::error_code{errno, std::generic_category()};
+      throw std::runtime_error("Could not open orders_db.txt !");
     }
 
     auto now = std::chrono::system_clock::now();
@@ -34,13 +33,13 @@ public:
 
     if (!file)
     {
-        return std::error_code{errno, std::generic_category()};
+      throw std::runtime_error("Could not write to a file !");
     }
 
     file.close();
     std::cout << "Order saved successfully." << std::endl;
     
-    return {};
+    return;
   }
 };
 
