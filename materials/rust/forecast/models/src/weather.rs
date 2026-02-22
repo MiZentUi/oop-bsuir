@@ -4,5 +4,6 @@ use utoipa::ToSchema;
 
 #[derive(Serialize, Deserialize, ToSchema)]
 pub struct CurrentWeather {
-    pub temperature: Decimal
+    #[schema(examples("0.0"))]
+    pub temperature: Decimal,
 }

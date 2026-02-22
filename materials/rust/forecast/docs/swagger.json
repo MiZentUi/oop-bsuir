@@ -83,7 +83,10 @@
         ],
         "properties": {
           "temperature": {
-            "type": "string"
+            "type": "string",
+            "examples": [
+              "0.0"
+            ]
           }
         }
       },
@@ -97,6 +100,9 @@
           "code": {
             "type": "integer",
             "format": "int32",
+            "examples": [
+              0
+            ],
             "minimum": 0
           },
           "message": {
@@ -115,6 +121,9 @@
           "code": {
             "type": "integer",
             "format": "int32",
+            "examples": [
+              200
+            ],
             "minimum": 0
           },
           "data": {
@@ -124,7 +133,10 @@
             ],
             "properties": {
               "temperature": {
-                "type": "string"
+                "type": "string",
+                "examples": [
+                  "0.0"
+                ]
               }
             }
           },

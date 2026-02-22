@@ -34,6 +34,7 @@ impl WeatherHandler {
 }
 
 #[derive(Deserialize, IntoParams, ToSchema)]
+#[into_params(parameter_in=Query)]
 pub struct GetCurrentWeatherQuery {
     /// Latitude
     #[param(default = "18.300231990440125")]
