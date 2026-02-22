@@ -25,10 +25,15 @@ int main ()
     // 4. Работа с обслуживанием
 
     std::cout << "\nTesting Warehouse Stuff:";
-    const std::vector<WarehouseWorker*> workers = {};
-    workers.push_back(HumanManager{});
-    workers.push_back(RobotPacker{"George Droid"}); //fix
+
+    auto hm = new HumanManager{};
+    auto rp = new RobotPacker{"George Droid"};
+    const std::vector<WarehouseWorker*> workers = {hm, rp};
 
     ManageWarehouse(workers);
+
+    delete hm;
+    delete rp;
+    
     return 0;
 }

@@ -12,11 +12,6 @@
 class RandomSQLDatabase
 {
   std::string ConnectionString;
-  // static RandomSQLDatabase* NewMySQLDatabase() {
-  //   RandomSQLDatabase* randomDatabase = new RandomSQLDatabase();
-  //   randomDatabase->ConnectionString = "random://root:password@localhost:228/shop";
-  //   return randomDatabase;
-  // }
 public:
   RandomSQLDatabase() : ConnectionString("random://root:password@localhost:228/shop") {std::cout << "randomsqldatabase" << std::endl;} //!!!w
 
@@ -27,7 +22,7 @@ public:
     std::ofstream file("orders_db.txt", std::ios::app);
     if (!file.is_open())
     {
-      return false;
+      return 1;
     }
     auto now = std::chrono::system_clock::now();
     auto local_now = std::chrono::zoned_time{std::chrono::current_zone(), now};
@@ -37,7 +32,7 @@ public:
     file.close();
 
     std::cout << "Order saved successfully." << std::endl;
-    return true;
+    return 0;
   }
 };
 
