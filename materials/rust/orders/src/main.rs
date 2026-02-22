@@ -1,7 +1,6 @@
 //! # Файл `main.rs`
 //! Точка входа в приложение
 
-use std::process::exit;
 
 use orders::{
     models::{Address, Item, Order},

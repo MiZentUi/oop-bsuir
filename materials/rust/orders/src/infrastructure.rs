@@ -29,7 +29,6 @@ impl RandomSQLDatabase {
         let mut file = OpenOptions::new()
             .append(true)
             .create(true)
-            .write(true)
             .read(false)
             .mode(0o644)
             .open("orders_db.txt")?;

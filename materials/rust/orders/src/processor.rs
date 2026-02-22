@@ -60,7 +60,7 @@ impl OrderProcessor {
         }
         // 4. Логика сохранения
         if let Err(err) = self.database.save_order(order, total) {
-            return Err(format!("database error: {}", err.to_string()));
+            return Err(format!("database error: {}", err));
         }
 
         // 5. Логика уведомлений
