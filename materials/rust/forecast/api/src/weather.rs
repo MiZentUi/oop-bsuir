@@ -1,7 +1,4 @@
-use std::sync::Arc;
-
 use axum::{
-    Json,
     extract::{Query, State, rejection::QueryRejection},
     http::StatusCode,
     response::IntoResponse,
@@ -11,12 +8,11 @@ use controllers::weather::CurrentWeatherController;
 use models::weather::CurrentWeather;
 use rust_decimal::Decimal;
 use serde::Deserialize;
-use serde_json::json;
 use shared::{
     responses::{self, StatusResponse, SuccessResponse},
     utils,
 };
-use utoipa::{IntoParams, OpenApi, ToSchema};
+use utoipa::{IntoParams, ToSchema};
 use utoipa_axum::{router::OpenApiRouter, routes};
 
 #[derive(Clone)]
@@ -69,7 +65,7 @@ pub async fn handle_get_current_weather(
     State(h): State<WeatherHandler>,
     query: Result<Query<GetCurrentWeatherQuery>, QueryRejection>,
 ) -> axum::response::Response {
-    if let Err(_) = query {
+    if query.is_err() {
         return responses::StatusResponse {
             code: StatusCode::BAD_REQUEST.as_u16(),
             message: "invalid coordinates".to_string(),
