@@ -13,15 +13,16 @@ import shared.responses.SuccessResponse
 import shared.utils.getEnv
 import java.math.BigDecimal
 
-class WeatherHandler(
-    val controller: CurrentWeatherController<OpenWeatherClient> =
+class WeatherHandler {
+    val controller: CurrentWeatherController<OpenWeatherClient> by lazy {
         CurrentWeatherController(
             OpenWeatherClient(
                 apiKey = getEnv("OPENWEATHER_API_KEY", ""),
                 baseURL = getEnv("OPENWEATHER_BASE_URL", "")
             )
         )
-)
+    }
+}
 
 fun Route.weatherRoutes(handler: WeatherHandler = WeatherHandler()) {
     route("/weather") {

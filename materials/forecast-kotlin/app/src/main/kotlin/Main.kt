@@ -2,6 +2,8 @@ import api.weatherRoutes
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.github.cdimascio.dotenv.dotenv
 import io.github.smiley4.ktorswaggerui.SwaggerUI
+import io.github.smiley4.ktorswaggerui.routing.openApiSpec
+import io.github.smiley4.ktorswaggerui.routing.swaggerUI
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -32,6 +34,14 @@ fun main() {
         }
 
         routing {
+            // ↓ Явная регистрация маршрутов Swagger — обязательно в версии 4.x
+            route("swagger") {
+                swaggerUI("/api.json")
+            }
+            route("api.json") {
+                openApiSpec()
+            }
+
             route("/api/v1") {
                 weatherRoutes()
             }
