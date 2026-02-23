@@ -1,0 +1,4 @@
+/target
+orders_db.txt
+*.env
+*.code-workspace
