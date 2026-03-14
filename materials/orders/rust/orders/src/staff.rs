@@ -49,7 +49,7 @@ impl WarehouseWorker for RobotPacker {
     }
 
     fn swing_the_lead(&self) {
-        println!("CRITICAL ERROR: Robot cannot waste our money (we hope so)");
+        panic!("CRITICAL ERROR: Robot cannot waste our money (we hope so)");
     }
 }
 
