@@ -37,6 +37,6 @@ else
 
 app.UseHttpsRedirection();
 
-app.MapGroup("api/v1").MapCurrentWeatherApi();
+app.MapGroup("/api/v1").MapCurrentWeatherApi();
 
 app.Run();

@@ -8,7 +8,7 @@ public class ApiCallException : System.Exception
     public ApiCallException(string message)
         : base(message) { }
 
-    public ApiCallException(string message, System.Exception inner)
+    public ApiCallException(string message, Exception inner)
         : base(message, inner) { }
 
     [Obsolete(

@@ -9,7 +9,7 @@ class CurrentWeatherController(IWeatherDataClient client)
 
     public async Task<CurrentWeather> GetCurrentWeather(decimal latitude, decimal longitude)
     {
-        var temperature = await client.GetCurrentTemperatureAtLocation(latitude, longitude);
+        var temperature = await client.LocationCurrentTemperature(latitude, longitude);
         return new(temperature);
     }
 }
