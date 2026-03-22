@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Net;
 using Forecast.Clients;
 using Forecast.Models;
@@ -17,7 +18,6 @@ static class WeatherApi
             .WithName("GetCurrentWeather")
             .WithDisplayName("Get Current Weather")
             .WithTags(["weather"])
-            .WithMetadata()
             .WithDescription("Returns current weather for given coordinates");
 
         return groups;
@@ -25,7 +25,11 @@ static class WeatherApi
 
     private static async Task<
         Results<Ok<Success<CurrentWeather>>, BadRequest<Status>, InternalServerError<Status>>
-    > WeatherEndpoint([FromServices] IWeatherDataClient client, string lat, string lon)
+    > WeatherEndpoint(
+        [FromServices] IWeatherDataClient client,
+        [DefaultValue("18.300231990440125")] string lat,
+        [DefaultValue("-64.8251590359234")] string lon
+    )
     {
         try
         {
@@ -34,15 +38,15 @@ static class WeatherApi
 
             var result = await client.GetCurrentTemperatureAtLocation(latitude, longitude);
             var weather = new CurrentWeather(result);
-            return TypedResults.Ok(Success.Create(200, "Success.", weather));
+            return TypedResults.Ok(Success.Create(200, "success", weather));
         }
         catch (FormatException)
         {
-            return TypedResults.BadRequest(Status.Create(400, "Invalid coordinates."));
+            return TypedResults.BadRequest(Status.Create(400, "invalid coordinates"));
         }
         catch (OverflowException)
         {
-            return TypedResults.BadRequest(Status.Create(400, "Invalid coordinates."));
+            return TypedResults.BadRequest(Status.Create(400, "invalid coordinates"));
         }
         catch (ApiCallException e)
         {
