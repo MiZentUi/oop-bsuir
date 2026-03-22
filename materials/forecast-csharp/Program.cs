@@ -1,15 +1,30 @@
-using Microsoft.AspNetCore.Http.HttpResults;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using DotEnv.Core;
+using Forecast;
+using Forecast.Clients;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Loading configuration as environment variables from the .env file.
+new EnvLoader().Load();
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
 {
     config.DocumentName = "WeatherExampleAPI";
     config.Title = "Weather Example API";
     config.Version = "v1";
+});
+builder.Services.AddHttpClient<OpenWeatherDataClient>();
+builder.Services.AddSingleton<IWeatherDataClient, OpenWeatherDataClient>();
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
 var app = builder.Build();
@@ -19,50 +34,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
     app.UseSwaggerUi();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler();
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing",
-    "Bracing",
-    "Chilly",
-    "Cool",
-    "Mild",
-    "Warm",
-    "Balmy",
-    "Hot",
-    "Sweltering",
-    "Scorching",
-};
-
-app.MapGroup("api/v1")
-    .MapGet(
-        "/weather",
-        Ok<WeatherForecast[]>
-        () =>
-        {
-            var forecast = Enumerable
-                .Range(1, 5)
-                .Select(index => new WeatherForecast(
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-                .ToArray();
-                // 109
-            return TypedResults.Ok(forecast);
-        }
-    )
-    .WithName("GetCurrentWeather")
-    .WithDisplayName("Get Current Weather")
-    .WithTags(["weather"])
-    .WithDescription("Returns current weather for given coordinates");
+app.MapGroup("api/v1").MapApiEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
