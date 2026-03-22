@@ -23,8 +23,8 @@ builder.Services.AddHttpClient<OpenWeatherDataClient>();
 builder.Services.AddSingleton<IWeatherDataClient, OpenWeatherDataClient>();
 builder.Services.Configure<JsonOptions>(options =>
 {
+    options.SerializerOptions.PropertyNameCaseInsensitive = false;
     options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
 var app = builder.Build();
