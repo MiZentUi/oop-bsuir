@@ -1,7 +1,7 @@
 namespace Forecast.Utils;
 
 [Serializable]
-public class ApiCallException : System.Exception
+public class ApiCallException : Exception
 {
     public ApiCallException() { }
 
