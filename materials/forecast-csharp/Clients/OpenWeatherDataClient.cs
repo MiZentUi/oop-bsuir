@@ -26,16 +26,16 @@ class OpenWeatherDataClient : IWeatherDataClient
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiCallException(
-                    $"Openweather returned bad status: {(ushort)response.StatusCode}."
+                    $"openweather returned bad status: {(ushort)response.StatusCode}"
                 );
             }
 
             var data = await response.Content.ReadFromJsonAsync<OpenWeatherResponse>();
-            return data?.Main?.Temp ?? throw new ApiCallException($"Failed to decode response.");
+            return data?.Main?.Temp ?? throw new ApiCallException($"failed to decode response");
         }
         catch (HttpRequestException e)
         {
-            throw new ApiCallException($"Failed to call openweather: {e.Message}.", inner: e);
+            throw new ApiCallException($"failed to call openweather: {e.Message}.", inner: e);
         }
     }
 }
