@@ -30,12 +30,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi();
     app.UseDeveloperExceptionPage();
 }
-else
-{
-    app.UseExceptionHandler();
-}
-
-app.UseHttpsRedirection();
 
 app.MapGroup("/api/v1").MapCurrentWeatherApi();
 
