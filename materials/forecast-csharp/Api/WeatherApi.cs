@@ -1,20 +1,19 @@
 using System.ComponentModel;
-using System.Net;
-using Forecast.Clients;
-using Forecast.Models;
+using Forecast.Controllers;
+using Forecast.Models.Weather;
 using Forecast.Shared.Responses;
 using Forecast.Utils;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Forecast;
+namespace Forecast.Api;
 
-static class WeatherApi
+public static class WeatherApi
 {
-    public static RouteGroupBuilder MapApiEndpoints(this RouteGroupBuilder groups)
+    public static RouteGroupBuilder MapCurrentWeatherApi(this RouteGroupBuilder groups)
     {
         groups
-            .MapGet("weather", WeatherEndpoint)
+            .MapGet("weather", WeatherApi.HandleGetCurrentWeather)
             .WithName("GetCurrentWeather")
             .WithDisplayName("Get Current Weather")
             .WithTags(["weather"])
@@ -25,8 +24,8 @@ static class WeatherApi
 
     private static async Task<
         Results<Ok<Success<CurrentWeather>>, BadRequest<Status>, InternalServerError<Status>>
-    > WeatherEndpoint(
-        [FromServices] IWeatherDataClient client,
+    > HandleGetCurrentWeather(
+        [FromServices] CurrentWeatherController controller,
         [DefaultValue("18.300231990440125")] string lat,
         [DefaultValue("-64.8251590359234")] string lon
     )
@@ -36,8 +35,8 @@ static class WeatherApi
             var latitude = decimal.Parse(lat);
             var longitude = decimal.Parse(lon);
 
-            var result = await client.GetCurrentTemperatureAtLocation(latitude, longitude);
-            var weather = new CurrentWeather(result);
+            var weather = await controller.GetCurrentWeather(latitude, longitude);
+
             return TypedResults.Ok(Success.Create(200, "success", weather));
         }
         catch (FormatException)

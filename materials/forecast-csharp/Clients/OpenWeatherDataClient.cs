@@ -12,9 +12,7 @@ class OpenWeatherDataClient : IWeatherDataClient
     {
         client = httpClient;
         client.BaseAddress = new Uri(config.GetValue<string>("OPENWEATHER_BASE_URL") ?? "");
-        apiKey =
-            config.GetValue<string>("OPENWEATHER_API_KEY")
-            ?? throw new ArgumentException("No API key provided.", nameof(config));
+        apiKey = config.GetValue<string>("OPENWEATHER_API_KEY") ?? "";
     }
 
     public async Task<decimal> GetCurrentTemperatureAtLocation(decimal latitude, decimal longitude)
@@ -28,7 +26,7 @@ class OpenWeatherDataClient : IWeatherDataClient
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiCallException(
-                    $"Openweather returned bad status: {response.StatusCode}."
+                    $"Openweather returned bad status: {(ushort)response.StatusCode}."
                 );
             }
 
