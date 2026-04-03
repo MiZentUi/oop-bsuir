@@ -11,7 +11,7 @@
 
 ## Environment variables
 
-Set environment variables before running:
+Set environment variables in `.env` file placed in root of project before running:
 
 ```shell
 # .env
