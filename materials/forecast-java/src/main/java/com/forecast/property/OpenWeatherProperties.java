@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "app.openweater")
-public class OpenWeaterProperties {
+@ConfigurationProperties(prefix = "app.openweather")
+public class OpenWeatherProperties {
     private String baseUrl;
     private String apiKey;
 }

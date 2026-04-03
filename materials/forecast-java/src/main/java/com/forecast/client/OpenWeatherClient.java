@@ -8,14 +8,14 @@ import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.forecast.property.OpenWeaterProperties;
+import com.forecast.property.OpenWeatherProperties;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class OpenWeatherClient implements WeatherDataClient {
-    private final OpenWeaterProperties properties;
+    private final OpenWeatherProperties properties;
 
     @Override
     public BigDecimal getCurrentWeather(BigDecimal lat, BigDecimal lon) throws Exception {

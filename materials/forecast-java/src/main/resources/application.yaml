@@ -14,7 +14,7 @@ springdoc:
     path: /swagger
 
 app:
-  openweater:
+  openweather:
     base-url: ${OPENWEATHER_BASE_URL}
     api-key: ${OPENWEATHER_API_KEY}
   google-weater:
