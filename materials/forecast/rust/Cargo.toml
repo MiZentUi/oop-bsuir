@@ -1,0 +1,17 @@
+[workspace]
+resolver = "3"
+members = [
+    "clients",
+    "controllers",
+    "models",
+    "api",
+    "shared",
+]
+
+[workspace.dependencies]
+rust_decimal = { version = "1.40.0", features = ["serde-arbitrary-precision"] }
+utoipa = { version = "5.4.0", features = ["decimal"] }
+serde_json = { version = "1.0.149", features = ["arbitrary_precision"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_derive = "1.0.228"
+axum = "0.8.8"
