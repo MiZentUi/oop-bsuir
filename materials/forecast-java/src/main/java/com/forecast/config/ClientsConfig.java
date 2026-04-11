@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-import com.forecast.property.OpenWeatherProperties;
+import com.forecast.properties.OpenWeatherProperties;
 
 @Configuration
 public class ClientsConfig {

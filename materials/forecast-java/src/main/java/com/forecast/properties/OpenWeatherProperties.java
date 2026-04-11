@@ -1,4 +1,4 @@
-package com.forecast.property;
+package com.forecast.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
