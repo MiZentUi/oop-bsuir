@@ -11,15 +11,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CurrentWeatherService {
+public class WeatherService {
     private final WeatherDataClient client;
 
     public CurrentWeather getCurrentWeather(BigDecimal lat, BigDecimal lon) {
-        try {
-            BigDecimal temperature = client.getCurrentWeather(lat, lon);
-            return new CurrentWeather(temperature);
-        } catch (Exception e) {
-            return null;
-        }
+        BigDecimal temperature = client.getCurrentTemperature(lat, lon);
+        return new CurrentWeather(temperature);
     }
 }

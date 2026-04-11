@@ -15,6 +15,6 @@ Set environment variables in `.env` file placed in root of project before runnin
 
 ```shell
 # .env
-OPENWEATHER_BASE_URL=https://api.openweathermap.org/data/2.5/weather
+OPENWEATHER_BASE_URL=https://api.openweathermap.org/data/2.5
 OPENWEATHER_API_KEY=xxxxxxxxxxxxxxxxx
 ```
