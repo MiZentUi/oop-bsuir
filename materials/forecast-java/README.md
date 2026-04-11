@@ -8,6 +8,7 @@
 
 - build: `gradle build`
 - run: `gradle bootRun`
+- jacoco: `gradle jacocoTestReport` - Java Code Coverage
 
 ## Environment variables
 
