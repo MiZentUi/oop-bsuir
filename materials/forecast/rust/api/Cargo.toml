@@ -1,0 +1,22 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clients = { version = "0.1.0", path = "../clients" }
+controllers = { version = "0.1.0", path = "../controllers" }
+models = { version = "0.1.0", path = "../models" }
+shared = { version = "0.1.0", path = "../shared" }
+
+rust_decimal.workspace = true
+serde_json.workspace = true 
+serde.workspace = true
+axum.workspace = true
+utoipa = { workspace = true, features = ["axum_extras", "yaml"] }
+
+utoipa-axum = "0.2.0"
+utoipa-swagger-ui = { version = "9.0.2", features = ["axum"] }
+dotenvy = "0.15.7"
+tokio = { version = "1.49.0", features = ["fs", "rt-multi-thread"] }
+
